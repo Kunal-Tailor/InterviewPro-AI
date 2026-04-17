@@ -1,6 +1,7 @@
 const express = require("express")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
+const path = require("path")
 
 const app = express()
 
@@ -21,6 +22,13 @@ app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
 
+/* serve frontend static files */
+const frontendDistPath = path.join(__dirname, "../../Frontend/dist")
+app.use(express.static(frontendDistPath))
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(frontendDistPath, "index.html"))
+})
 /* global error handler */
 app.use((err, req, res, next) => {
     console.error("ERROR:", err.message)
